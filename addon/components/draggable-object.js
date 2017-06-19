@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   dragCoordinator: Ember.inject.service(),
-  tagName: "div",
+  // tagName: "div",
   overrideClass: 'draggable-object',
   classNameBindings: [':js-draggableObject','isDraggingObject:is-dragging-object:', 'overrideClass'],
   attributeBindings: ['dragReady:draggable'],
@@ -10,6 +10,7 @@ export default Ember.Component.extend({
   dragReady: true,
   isSortable: false,
   sortingScope: 'drag-objects',
+  style:"height:auto;width:auto",
   title: Ember.computed.alias('content.title'),
 
   draggable: Ember.computed('isDraggable', function() {
@@ -47,7 +48,17 @@ export default Ember.Component.extend({
       }
     });
   },
-
+  // styleAttrs: Ember.computed('style', {
+  //   // console.log('')
+  //   // return new Ember.Handlebars.SafeString('width:' + this.get('style') );
+  // });
+  didReceiveAttrs(){
+    this._super(...arguments);
+    let height=this.get('height')||"auto";
+    let width=this.get('width')||"auto";
+    let _style="width:"+width+";"+"height:"+height;
+    this.set('style',_style);
+  },
   willDestroyElement(){
     if (this.$(this.get('dragHandle'))) {
       this.$(this.get('dragHandle')).off();
